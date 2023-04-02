@@ -21,7 +21,8 @@ def construct_index(directory_path):
 
     documents = SimpleDirectoryReader(directory_path).load_data()
 
-    index = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper)
+    # index = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor, prompt_helper=prompt_helper)
+    index = GPTSimpleVectorIndex.from_documents(documents)
 
     index.save_to_disk('index.json')
 
@@ -33,9 +34,9 @@ def chatbot(input_text):
     return response.response
 
 iface = gr.Interface(fn=chatbot,
-                     inputs=gr.inputs.Textbox(lines=7, label="Enter your text"),
+                     inputs=gr.inputs.Textbox(lines=7, label="Enter your question"),
                      outputs="text",
-                     title="Custom-trained AI Chatbot")
+                     title="Filament sidekick")
 
 index = construct_index("docs")
 iface.launch(share=True)
